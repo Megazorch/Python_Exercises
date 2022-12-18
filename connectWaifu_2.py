@@ -14,7 +14,7 @@ js = json.loads(data)
 
 step = 1
 
-with open('waifu.csv', mode='r+', encoding='utf-8') as csvfile:
+with open('/home/ivakhiv/PythonLearnExercises/git/Python_Exercises/waifu.csv', mode='r+', encoding='utf-8') as csvfile:
     junkObj = csvfile.readlines()
     if len(junkObj) == 0:
         count2 = 0
