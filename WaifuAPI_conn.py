@@ -2,15 +2,8 @@
 Connect to Waifu API, get json file with data, add this data to database
 and then open image in web browser.
 """
-import psycopg
-import os
 import requests
-import webbrowser
 import WaifuAPI_db_com
-
-from dotenv import load_dotenv
-from copy import deepcopy
-load_dotenv()
 
 
 def get_image():
@@ -103,7 +96,7 @@ def open_image():
     :return:
     """
     while True:
-        image_to_see = input('Which image do you want to see: already seen, not seen yet, all or new?[seen, not or nt, all, new]')
+        image_to_see = input('Which image do you want to see: seen, not seen, all or new?[seen, not or nt, all, new]')
         if any(a in image_to_see for a in ('Seen', 'seen', 'S', 's')):
             WaifuAPI_db_com.open_seen_image()
             break
