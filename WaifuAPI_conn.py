@@ -39,8 +39,8 @@ def get_image():
                 print('Input', one_or_many, 'is incorrect. Please try again.')
         elif any(a in random_search_y_n for a in ('N', 'n', 'No', 'no')):
             print('Versatile tags:')
-            for tag_num in range(len(versatile)):
-                print(list_of_tags.format(tag_num + 1, versatile[tag_num]))
+            for tag_num, tag_value in enumerate(versatile, start=1):
+                print(list_of_tags.format(tag_num, tag_value))
             chosen_ver_tags = input('Choose tags by numbers (1,2,10):')
             chosen_ver_tags = chosen_ver_tags.split(',')
             for num in chosen_ver_tags:
@@ -53,8 +53,8 @@ def get_image():
                     is_nsfw = 'true'
                 elif any(a in nsfw_random for a in ('F', 'f', 'Force', 'force')):
                     print('NSFW tags:')
-                    for tag_num in range(len(nsfw)):
-                        print(list_of_tags.format(tag_num + 1, nsfw[tag_num]))
+                    for tag_num, tag_value in enumerate(nsfw, start=1):
+                        print(list_of_tags.format(tag_num, tag_value))
                     chosen_nsfw_tags = input('Choose tags by numbers (1,2,10):')
                     chosen_nsfw_tags = chosen_nsfw_tags.split(',')
                     for num in chosen_nsfw_tags:

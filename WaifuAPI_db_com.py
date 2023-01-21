@@ -38,7 +38,7 @@ def create_tables(connection):
                             image_id INTEGER NOT NULL,
                             favourites INTEGER NOT NULL,
                             dominant_color VARCHAR(10) NOT NULL,
-                            source VARCHAR(80) NOT NULL,
+                            source VARCHAR(80),
                             uploaded_at DATE NOT NULL,
                             liked_at VARCHAR(10),
                             is_nsfw BOOLEAN NOT NULL,
@@ -82,12 +82,12 @@ def upload_to_db(image_json):
         if not cur.fetchone()[0]:
             create_tables(connection)
 
-        for i in range(len(image_json['images'])):
-            image_dict = deepcopy(image_json['images'][i])
+        for idx, value in enumerate(image_json['images']):
+            image_dict = deepcopy(value)
             image_dict.pop('tags')
             image_values = list(image_dict.values())
 
-            image_tags = (image_json['images'][i]['tags'][0]).values()
+            image_tags = (image_json['images'][idx]['tags'][0]).values()
             # I tried to use JSON adaptation via 'from psycopg.types.json import Jsonb'
             # but it seems impossible for me to implement this feature for big number
             # of columns. (Someone is silently crying.)
@@ -122,9 +122,9 @@ def open_seen_image():
     with connection.cursor() as cur:
         cur.execute("SELECT url, seen FROM images WHERE seen >= 1")
         image_urls = cur.fetchall()
-        for image_url in range(len(image_urls)):
-            print('url -', image_urls[image_url][0], 'seen -', image_urls[image_url][1])
-            webbrowser.open(image_urls[image_url][0])
+        for idx, image_url in enumerate(image_urls):
+            print('url -', image_url[0], 'seen -', image_url[1])
+            webbrowser.open(image_url[0])
         cur.execute("UPDATE images SET seen = seen + 1 WHERE seen >= 1")
 
         connection.commit()
@@ -140,9 +140,9 @@ def open_not_seen_images():
     with connection.cursor() as cur:
         cur.execute("SELECT url, seen FROM images WHERE seen IS NULL")
         image_urls = cur.fetchall()
-        for image_url in range(len(image_urls)):
-            print('url -', image_urls[image_url][0], 'seen -', image_urls[image_url][1])
-            webbrowser.open(image_urls[image_url][0])
+        for idx, image_url in enumerate(image_urls):
+            print('url -', image_url[0], 'seen -', image_url[1])
+            webbrowser.open(image_url[0])
         cur.execute("UPDATE images SET seen = 1 WHERE seen IS NULL")
 
         connection.commit()
@@ -158,9 +158,9 @@ def open_all_images():
     with connection.cursor() as cur:
         cur.execute("SELECT url, seen FROM images")
         image_urls = cur.fetchall()
-        for image_url in range(len(image_urls)):
-            print('url -', image_urls[image_url][0], 'seen -', image_urls[image_url][1])
-            webbrowser.open(image_urls[image_url][0])
+        for idx, image_url in enumerate(image_urls):
+            print('url -', image_url[0], 'seen -', image_url[1])
+            webbrowser.open(image_url[0])
         cur.execute("UPDATE images SET seen = seen + 1 WHERE seen >= 1")
         cur.execute("UPDATE images SET seen = 1 WHERE seen IS NULL")
 
@@ -175,11 +175,11 @@ def open_new():
     connection = connect_to_db()
 
     with connection.cursor() as cur:
-        cur.execute("SELECT url FROM images WHERE new IS TRUE")
+        cur.execute("SELECT url, seen FROM images WHERE new IS TRUE")
         image_urls = cur.fetchall()
-        for image_url in range(len(image_urls)):
-            print('url -', image_urls[image_url][0], 'NEW IMAGE')
-            webbrowser.open(image_urls[image_url][0])
+        for idx, image_url in enumerate(image_urls):
+            print('url -', image_url[0], 'seen -', image_url[1])
+            webbrowser.open(image_url[0])
         cur.execute("UPDATE images SET new = False WHERE new IS TRUE")
         cur.execute("UPDATE images SET seen = 1 WHERE seen IS NULL")
 
