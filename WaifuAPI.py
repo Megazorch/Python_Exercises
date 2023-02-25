@@ -8,14 +8,14 @@ import argparse
 
 
 parser = argparse.ArgumentParser(description='Get waifu image.')
-parser.add_argument('-d', '--download', nargs='*', type=str, default='empty')
-parser.add_argument('-o', '--open', nargs='*', type=str, default='empty')
+parser.add_argument('-d', '--download', nargs='*', type=str, default=None)
+parser.add_argument('-o', '--open', nargs='*', type=str, default=None)
 args = vars(parser.parse_args())
 download = args['download']
 open_arg = args['open']
 
 
-if download == 'empty' and open_arg == 'empty':
+if download is None and open_arg is None:
     while True:
         download_or_open = input("Would you like to download or open existing image?[D/o]")
         if any(a in download_or_open for a in ('D', 'd', 'Download', 'download')):
